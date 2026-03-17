@@ -1,147 +1,189 @@
-# Project Overview
+# Data Preprocessing and Validation System
 
-This repository encapsulates a comprehensive, data-driven system designed for financial market analysis and stock prediction. It primarily serves as an analytical backbone for ensuring data integrity, operational transparency, and scalable predictive analytics in high-stakes trading environments. The core of the system emphasizes reliability, scalability, and maintainability by implementing structured logging, performance monitoring, sophisticated data validation, and robust deployment readiness features. Its key objective is to support real-time and batch processing of stock market data, culminating in accurate stock price predictions that assist decision-making processes in finance-centric applications.
+## 1. Project Overview
+
+This repository hosts a comprehensive system designed to support data preprocessing, validation, and quality assurance within enterprise data pipelines. Its primary objectives are to ensure data integrity, consistency, and correctness before further processing or analysis. The system addresses critical challenges such as outlier detection, error handling, feature validation, and schema enforcement, making it suitable for production-grade data environments, especially in scenarios requiring high data quality standards. Use cases include automated data validation workflows, feature engineering verification, and robust handling of data anomalies in large-scale datasets.
 
 ---
 
-# Repository Structure (Tree Format)
+## 2. Repository Structure (Tree Format)
 
 ```plaintext
 project-root/
-├── configs/                         # Configuration files (YAML, environment settings)
-├── src/                             # Source code
-│   ├── modules/                     # Main functional modules
-│   │   ├── logging/                 # Logging infrastructure and modules
-│   │   ├── testing/                 # Testing utilities and test cases
-│   │   ├── validation/              # Data validation utilities
-│   │   ├── performance/             # Performance monitoring tools
-│   │   ├── data_processing/         # Data ingestion, cleaning, and validation
-│   │   └── prediction/                # Stock prediction models and pipelines
-│   └── main.py                      # Entry point for execution
-├── tests/                           # Test suites and test cases
-├── requirements.txt                 # Dependency list
-├── README.md                        # Documentations
-└── scripts/                         # Helper scripts for deployment, setup, etc.
+├── data/
+│   ├── sample_data/
+│   └── processed/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── test_utils.py
+├── configs/
+│   ├── default_config.yaml
+│   └── validation_rules.yaml
+├── src/
+│   ├── data_preprocessor/
+│   │   ├── __init__.py
+│   │   ├── processor.py
+│   │   ├── outlier_detection.py
+│   │   ├── feature_validation.py
+│   │   └── schema_enforcement.py
+│   ├── validation/
+│   │   ├── __init__.py
+│   │   ├── validation_engine.py
+│   │   ├── outlier_filter.py
+│   │   └── outlier_removal.py
+│   └── utils/
+│       ├── helpers.py
+│       └── logging.py
+├── requirements.txt
+├── README.md
+└── setup.py
 ```
 
 ---
 
-# System Architecture & Workflow
+## 3. System Architecture & Workflow
 
-The system operates through a multi-stage pipeline, orchestrated for robustness and transparency:
+**End-to-End Operation:**
 
-1. **Data Ingestion:** Utilizes modular components to fetch stock market data from multiple sources, with validation layers ensuring data validity and structure adherence.
-2. **Data Validation & Validation Utilities:** Ensures all data conforms to expected schemas (`'close price'`, `'volume'`, `'date'`, etc.), checking for missing data, anomalies, and structural integrity.
-3. **Performance Monitoring:** Implements decorators and context managers to track execution times of data processing, validation, and prediction routines, facilitating profiling and bottleneck identification.
-4. **Operational Transparency:** Logging infrastructure captures detailed logs, including system events, errors, and operational metrics, segmented by configurable levels and formats.
-5. **Predictive Modeling:** Using scalable prediction modules, the system applies machine learning pipelines to forecast stock prices based on validated historical data.
-6. **Data Quality & Validation:** Continuous validation ensures data integrity propagates through the pipeline, with mechanisms to handle missing data and schema deviations effectively.
-7. **Deployment & Scalability Prep:** Supports flexible configuration management, enabling the system to adapt to diverse deployment environments while maintaining high reliability.
-8. **Monitoring & Feedback:** Real-time monitoring tools visualize pipeline performance, with structured logs and profiling feeding back into system tuning.
+1. **Data Ingestion:** Raw data is loaded from source systems or test datasets.
+2. **Preprocessing:**
+   - The `DataPreprocessor` module applies initial transformations.
+   - Outlier detection functions flag anomalous data points.
+3. **Validation:**
+   - The `ValidationEngine` enforces schema integrity, checking for required columns, types, and value ranges.
+   - Outlier filtering and removal are carried out via dedicated modules, ensuring data conforms to expected distributions.
+   - Features are validated against predefined rules, such as presence, format, and logical constraints.
+4. **Outlier Handling & Error Management:**
+   - Outliers are explicitly filtered or adjusted, with logs capturing the process.
+   - Errors, such as missing columns or type mismatches, trigger validation failures or warnings.
+5. **Final Data Quality Check:**
+   - Data passes through integrity checks to confirm the absence of critical issues.
+   - Outliers are managed based on configurable thresholds, supporting both strict and lenient modes.
+6. **Output & Export:**
+   - Validated data is saved for downstream processes or analysis.
+   - Logs and reports are generated for audit and debugging purposes.
+
+This modular architecture allows independent testing, easy extension, and seamless integration into CI/CD pipelines, enabling automated validation within data workflows.
 
 ---
 
-# Technical Stack & Engineering Design
+## 4. Technical Stack & Engineering Design
 
 - **Languages & Libraries:**
-  - Python 3.x for core implementation
-  - Pandas for data manipulation and DataFrames
-  - Scikit-learn for machine learning models
-  - PyYAML for configuration management
-  - Templating with YAML for environment-specific setups
-  - Logging with custom modules and external frameworks
-    
-- **Architectural Patterns:**
-  - Modular, layered architecture separating concerns: data validation, processing, prediction, logging.
-  - Decorator and context manager patterns for performance tracking.
-  - Strive for high cohesion within modules and loose coupling between components.
-  - Configurable logging and environment tuning to adapt across deployment environments.
+  - Python 3.x
+  - Pandas for data manipulation
+  - PyYAML for configuration parsing
+  - NumPy for numerical operations
+  - Logging module for structured logs
 
-- **Engineering Practices:**
-  - Emphasis on data integrity, operational transparency, and fault tolerance.
-  - Continuous validation at each pipeline stage.
-  - Clear separation of configuration and code.
-  - Support for scalable, environment-agnostic deployment.
+- **Architectural Patterns:**
+  - Modular design separating preprocessing, validation, and utility functions.
+  - Layered validation approach combining schema checks, feature validation, and outlier management.
+  - Explicit outlier detection and filtering methods to ensure data robustness.
+  - Use of configuration-driven validation rules for flexibility.
+
+- **Design Philosophy:**
+  - Emphasis on robustness, extensibility, and maintainability.
+  - Validation routines are designed to prevent data quality regressions.
+  - Integration with CI/CD pipelines for continuous validation.
+  - Support for synthetic data generation for testing purposes.
 
 ---
 
-# Installation & Setup Instructions
+## 5. Installation & Setup Instructions
 
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd project-root
-
-# Set up a virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
-
-# (Optional) Configure environment variables or modify configuration files in configs/
 ```
 
----
-
-# Usage Guide
-
-### Running the Data Processing & Prediction Pipeline
+Optional: For development and testing
 
 ```bash
-# Execute main script
-python src/main.py
+pip install -e .
 ```
 
-### Example: Custom Data Validation
+Ensure configuration files are correctly set in the `configs/` directory before running.
+
+---
+
+## 6. Usage Guide
+
+### Running Data Validation
+
+```bash
+python -m src.validation.validation_engine --config configs/default_config.yaml --data data/sample_data.csv
+```
+
+### Example: Data Preprocessing Step
 
 ```python
-from src.modules.validation.validation_utils import validate_dataframe
+from src.data_preprocessor.processor import DataPreprocessor
 
-# Assuming df is a DataFrame loaded with stock data
-validate_dataframe(df)
+# Load data
+import pandas as pd
+data = pd.read_csv('data/sample_data.csv')
+
+# Initialize processor
+preprocessor = DataPreprocessor(config_path='configs/default_config.yaml')
+
+# Process data
+processed_data = preprocessor.process(data)
+
+# Save processed data
+processed_data.to_csv('data/processed/validated_data.csv', index=False)
 ```
 
-### Monitoring and Logging
+### Custom Validation Rules
 
-Logs are generated as per your configuration in YAML files, and real-time monitoring can be integrated via custom dashboards or external tools as configured.
-
----
-
-# Key Engineering Considerations
-
-- **Scalability:** Modular design supports scaling Java or distributed architectures in production.
-- **Performance:** Decorators and context managers facilitate detailed profiling; bottlenecks are identified early.
-- **Maintainability:** Clear separation of concerns, comprehensive logging, and validation utilities promote easier updates.
-- **Extensibility:** Configurable components and core modules engineered to accommodate future models, data sources, or validation schemas.
-- **Data Integrity & Validation:** Continuous enforcement of schema compliance, surrogate key validation, and anomaly detection prevent the propagation of corrupt data.
-- **Operational Resilience:** Structured logging, error handling, and monitoring mechanisms ensure system robustness in production.
-- **Transparency:** Detailed logs and profiling align with enterprise governance and audit requirements.
+Adjust `validation_rules.yaml` to specify thresholds, feature constraints, and schema expectations.
 
 ---
 
-# Contribution Guidelines
+## 7. Key Engineering Considerations
 
-Contributions are welcome to enhance functionality, improve performance, or extend documentation. Please adhere to the following:
-
-- Fork the repository and create feature branches.
-- Ensure your code adheres to the existing code style.
-- Add or update tests for your changes.
-- Run existing tests (`pytest` or as specified) before submitting.
-- Submit pull requests with descriptive titles and detailed descriptions.
-
----
-
-# Credits & Acknowledgements
-
-This system is developed with contributions from a dedicated team of data engineers and software architects committed to advancing high-reliability, high-performance financial analytics solutions. Special thanks to the communities around Pandas, Scikit-learn, and PyYAML for their robust libraries enabling this infrastructure.
+- **Scalability:** Designed to handle large datasets via efficient pandas operations and configurable batch processing.
+- **Performance:** Outlier detection and validation routines are optimized with vectorized operations.
+- **Maintainability:** Modular codebase with clear separation of concerns; easy to extend validation rules.
+- **Extensibility:** Support for custom feature validation, additional outlier detection methods, and schema definitions.
+- **Data Integrity:** Rigorous schema enforcement and explicit outlier handling reduce downstream errors.
+- **Error Handling:** Clear logging and exception management facilitate debugging and audit trails.
+- **Testing & Validation:** Extensive unit and integration tests ensure robustness and correctness.
 
 ---
 
-# Final Notes
+## 8. Contribution Guidelines
 
-This comprehensive infrastructure establishes a resilient, scalable, and transparent foundation for high-fidelity stock market analysis, aligning with enterprise standards for reliability and maintainability. It enables data integrity assurance, operational visibility, and real-time predictive insights critical for financial decision-making.
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+3. Make your changes with clear, descriptive commit messages.
+4. Run tests:
+   ```bash
+   pytest
+   ```
+5. Push your branch:
+   ```bash
+   git push origin feature/your-feature
+   ```
+6. Submit a pull request with a detailed description of your changes.
+
+Follow the existing code style and ensure all tests pass before submitting.
 
 ---
 
-*End of README.*
+## 9. Credits & Acknowledgements
+
+This system is developed by the Data Engineering Team, leveraging best practices in data validation and software engineering. Special thanks to contributors who provided valuable feedback and testing support.
+
+---
+
+**Note:** Replace `<repository-url>` with your actual repository URL before deploying or sharing this README.
