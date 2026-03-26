@@ -1,0 +1,4 @@
+virtual_machine:
+  instance1:
+    os_name: "Windows-ABC"
+    name: "ABC"
